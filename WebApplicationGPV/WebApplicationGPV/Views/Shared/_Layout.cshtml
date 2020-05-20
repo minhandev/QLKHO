@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="~/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    @RenderSection("css", false)
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        @Html.Partial("_Slidebar")
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ml-auto">
+
+                        @{
+                            var id = (WebApplicationGPV.Common.nguoidungLogin)Session[WebApplicationGPV.Common.sessionSite.USER_SESSION];
+                        }
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if (id != null)
+                                {
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><b>Chào: @id.TenNV</b></span>
+                                    <img class="img-profile rounded-circle" src="~/upload/@id.image">
+                                }
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    ĐĂNG XUẤT
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <div>
+                    @RenderBody()
+                </div>
+            </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy;  minhandev 2020</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn đăng xuất?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <a class="btn btn-primary" href="@Url.Action("Logout", "Login")">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/vendor/jquery/jquery.js"></script>
+    <script src="~/Scripts/vendor/jquery-easing/jquery.easing.js"></script>
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Scripts/Site.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+    @RenderSection("js", false)
+</body>
+</html>

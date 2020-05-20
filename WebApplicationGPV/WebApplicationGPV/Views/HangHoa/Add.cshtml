@@ -1,0 +1,49 @@
+﻿@model WebApplicationGPV.Models.HangHoa
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="textName"></h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <div class="form-group col-sm-12">
+                        @Html.Label("MÃ HÀNG HÓA", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.MaHH, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txthanghoa"})
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.Label("NHÓM SẢN PHẨM", new { @class = "control-label" })
+                        @Html.DropDownList("ID_NHH", ViewBag.ListNHH as SelectList, "Chọn giá trị", new { @class = "form-control", id = "txtnhh" })
+                    </div>
+
+                    <div class="form-group col-sm-12">
+                        @Html.Label("TÊN HÀNG HÓA", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.TenHH, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtten" })
+                    </div>
+                    <div class="form-group col-sm-12">
+                        @Html.Label("MÔ TẢ", new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", id = "txtmota", placeholder = "Nhập giá trị..." })
+                    </div>
+                    <div class="form-group col-sm-12">
+                        @Html.Label("SỐ LƯỢNG TỒN", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.SoLuongTon, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtsoluog" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success btn-sm" id="btnSave">Thêm</button>
+            <button type="button" class="btn btn-success btn-sm" id="btn-active">Xác nhận</button>
+            &nbsp; <button type="button" data-dismiss="modal" class="btn btn-warning btn-sm">Hủy</button>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,51 @@
+﻿@model WebApplicationGPV.Models.nhanvienModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="textName">THÊM DANH SÁCH NHÂN VIÊN</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    @Html.HiddenFor(model => model.MaNV, new { id = "txtmanv" })
+                    <div class="form-group col-sm-12">
+                        @Html.Label("CHỨC VỤ", new { @class = "control-label" })
+                        @Html.DropDownList("PB", ViewBag.ListPB as SelectList, "Chọn giá trị", new { @class = "form-control", id = "txtpb" })
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.Label("HỌ & TÊN", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.TenNV, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtten" })
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.Label("QUÊ QUÁN", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.MT, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtmt" })
+                    </div>
+                    <div class="form-group col-sm-6">
+                        @Html.Label("TÀI KHOẢN", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.taikhoan, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txttaikhoan" })
+                    </div>
+                    <div class="form-group col-sm-6">
+                        @Html.Label("MẬT KHẨU", new { @class = "control-label" })
+                        @Html.PasswordFor(model => model.MatKhau, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtmatkhau" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("HÌNH ẢNH", new { @class = "control-label" })
+                    <input id="uploadImg" type="file" class="form-control" name="roomImage" title="Loading hình ảnh" onchange="DisplayImage(this)" />
+                    <br />
+                    <img id="imgRoom" height="120" width="100" style="border: 1px solid;" class="float-right" />
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success btn-sm" id="btnSave">Thêm</button>
+            &nbsp; <button type="button" data-dismiss="modal" class="btn btn-warning btn-sm">Hủy</button>
+        </div>
+    </div>
+</div>
+

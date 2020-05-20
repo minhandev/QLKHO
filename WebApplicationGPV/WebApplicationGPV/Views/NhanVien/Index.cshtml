@@ -1,0 +1,229 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.NhanVien>
+@{
+    ViewBag.Title = "DANH SÁCH NHÂN VIÊN";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title" style="text-transform: uppercase;"><b>@ViewBag.Title</b></h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm float-right" style="width: 700px;">
+                            <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm nhân viên...">
+                            <div class="input-group-append">
+                                <button id="btnAdd" type="button" class="btn btn-outline-success btn-sm" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#Add"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-excel"></i> excel (.csxl)</a>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-word"></i> word (.doc)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model != null)
+                    {
+                        <table id="tableNhanvien" class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>MÃ NV</th>
+                                    <th>HỌ & TÊN</th>
+                                    <th>ĐỊA CHỈ</th>
+                                    <th>CHỨC VỤ</th>
+                                    <th>ACTIVE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td><img src="@Url.Content("~/upload/" + item.image)" width="30" height="35" /></td>
+                                        <td>@item.MaNV</td>
+                                        <td>@item.TenNV</td>
+                                        <td>@item.MT</td>
+                                        <td>@item.PhongBan.TenBP</td>
+                                        <td class="project-actions text-right">
+                                            <a href="" type="button" id="btntinhtrang" class="btn btn-outline-success btn-sm" title="Kích hoạt tài khoản" onclick="ActiveStatus(@item.MaNV)">@Html.Raw(item.Status ? "Ok" : "No")</a>
+                                            <button id="btnEdit" class="btn btn-warning btn-sm" onclick="Edit(@item.MaNV)" title="Cập nhật thông tin nhân viên"><i class="fas fa-edit"></i></button>
+                                            <button id="btnDelete" class="btn btn-danger btn-sm" onclick="Delete(@item.MaNV)" title="Xóa thông tin nhân viên"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Warning!</strong> Không có dữ liệu.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Add" class="modal fade" role="dialog">
+    @Html.Action("Add", "nhanvien")
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+
+        function DisplayImage(result) {
+            if (result.files && result.files[0]) {
+                var filereader = new FileReader();
+                filereader.onload = function (e) {
+                    $("#imgRoom").attr('src', e.target.result);
+                }
+                filereader.readAsDataURL(result.files[0]);
+            }
+        }
+
+        $('#tableNhanvien').DataTable({
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "searching": false,
+            'language': {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+            }
+        });
+
+        $(document).ready(function () {
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $("#btnSave").click(function () {
+                SaveData();
+            });
+            $("#txtmanv").val("0");
+            $("#btnAdd").click(function () {
+                $("#txtmanv").val(0);
+                $("#txtten").val('');
+                $("#txtpb").val('');
+                $("#txtmatkhau").val('');
+                $("#txtmt").val('');
+                $("#txttaikhoan").val('');
+                $("#imgRoom").removeAttr('src');
+                $("#textName").text('THÊM NHÂN VIÊN');
+            });
+        });
+        /* Cập nhật tình trạng nhân sự*/
+        function ActiveStatus(id) {
+            $.ajax({
+                url: "/NhanVien/ChangeStatus",
+                data: { id: id },
+                dataType: "json",
+                type: "POST",
+                processData: true,
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == true) {
+                        location.reload();
+                    }
+                }
+            });
+        }
+
+        /*Thêm mới nhân sự*/
+        function SaveData() {
+            formData = new FormData();
+            formData.append("MaNV", $("#txtmanv").val());
+            formData.append("TenNV", $("#txtten").val());
+            formData.append("PB", $("#txtpb").val());
+            formData.append("MatKhau", $("#txtmatkhau").val());
+            formData.append("MT", $("#txtmt").val());
+            formData.append("taikhoan", $("#txttaikhoan").val());
+            formData.append("image", $("#uploadImg").get(0).files[0]);
+            $.ajax({
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == true) {
+                        alert(data.message);
+                        location.reload();
+                        $("#Add").modal('hide');
+                    }
+                },
+                error: function () {
+                    toastr.error("Lỗi, vui lòng thử lại sau!", { timeOut: 3000 });
+                }
+            })
+        }
+
+        function Edit(id) {
+            $.ajax({
+                url: '/NhanVien/Send',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    console.log("data success!");
+                    console.log(data);
+                    $("#txtmanv").val(data.MaNV);
+                    $("#txtten").val(data.TenNV);
+                    $("#txtpb").val(data.PB);
+                    $("#txtmatkhau").val(data.MatKhau);
+                    $("#txtmt").val(data.MT);
+                    $("#txttaikhoan").val(data.taikhoan);
+                    $("#imgRoom").attr('src', "../upload/" + data.image);
+                    $("#Add").modal({ show: true });
+                    $("#textName").text('CẬP NHẬT NHÂN VIÊN:' + data.tennv);
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                },
+            });
+        }
+
+        function Delete(id) {
+            console.log(id);
+            var result = confirm('Bạn có muốn xóa?');
+            if (result == false) {
+                return false;
+            }
+            $.ajax({
+                url: '/NhanVien/Delete',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log("data success!");
+                        toastr.success(data.message, "Error Alert", { timeOut: 3000 });
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                }
+            });
+        }
+    </script>
+}
+
