@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CSDLQLKhoGPVModelStoreContainer" CdmEntityContainer="dbQLKhoEntities">
+    <EntitySetMapping Name="CapQuyens">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.CapQuyen">
+        <MappingFragment StoreEntitySet="CapQuyens">
+          <ScalarProperty Name="PB" ColumnName="PB" />
+          <ScalarProperty Name="mavaitro" ColumnName="mavaitro" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CT_XuatKho">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.CT_XuatKho">
+        <MappingFragment StoreEntitySet="CT_XuatKho">
+          <ScalarProperty Name="ID_CT" ColumnName="ID_CT" />
+          <ScalarProperty Name="ID_PhieuXuat" ColumnName="ID_PhieuXuat" />
+          <ScalarProperty Name="MaHH" ColumnName="MaHH" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="Tongcong" ColumnName="Tongcong" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NhaCungCaps">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.NhaCungCap">
+        <MappingFragment StoreEntitySet="NhaCungCaps">
+          <ScalarProperty Name="MaNCC" ColumnName="MaNCC" />
+          <ScalarProperty Name="TenNCC" ColumnName="TenNCC" />
+          <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+          <ScalarProperty Name="SDT" ColumnName="SDT" />
+          <ScalarProperty Name="Web" ColumnName="Web" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NhaKhoes">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.NhaKho">
+        <MappingFragment StoreEntitySet="NhaKhoes">
+          <ScalarProperty Name="ID_NhaKho" ColumnName="ID_NhaKho" />
+          <ScalarProperty Name="SoTang" ColumnName="SoTang" />
+          <ScalarProperty Name="SoHang" ColumnName="SoHang" />
+          <ScalarProperty Name="SoCot" ColumnName="SoCot" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NhanViens">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.NhanVien">
+        <MappingFragment StoreEntitySet="NhanViens">
+          <ScalarProperty Name="MaNV" ColumnName="MaNV" />
+          <ScalarProperty Name="TenNV" ColumnName="TenNV" />
+          <ScalarProperty Name="PB" ColumnName="PB" />
+          <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+          <ScalarProperty Name="MT" ColumnName="MT" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="taikhoan" ColumnName="taikhoan" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NhomSanPhams">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.NhomSanPham">
+        <MappingFragment StoreEntitySet="NhomSanPhams">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ID_Nhom" ColumnName="ID_Nhom" />
+          <ScalarProperty Name="TenNhom" ColumnName="TenNhom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhieuNhaps">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.PhieuNhap">
+        <MappingFragment StoreEntitySet="PhieuNhaps">
+          <ScalarProperty Name="ID_PhieuNhap" ColumnName="ID_PhieuNhap" />
+          <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
+          <ScalarProperty Name="ID_NhanVien" ColumnName="ID_NhanVien" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhieuXuats">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.PhieuXuat">
+        <MappingFragment StoreEntitySet="PhieuXuats">
+          <ScalarProperty Name="ID_PhieuXuat" ColumnName="ID_PhieuXuat" />
+          <ScalarProperty Name="ID_NhanVien" ColumnName="ID_NhanVien" />
+          <ScalarProperty Name="ThoiGian" ColumnName="ThoiGian" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhongBans">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.PhongBan">
+        <MappingFragment StoreEntitySet="PhongBans">
+          <ScalarProperty Name="PB" ColumnName="PB" />
+          <ScalarProperty Name="TenBP" ColumnName="TenBP" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SanPhams">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.SanPham">
+        <MappingFragment StoreEntitySet="SanPhams">
+          <ScalarProperty Name="MaHH" ColumnName="MaHH" />
+          <ScalarProperty Name="TenHH" ColumnName="TenHH" />
+          <ScalarProperty Name="NSX" ColumnName="NSX" />
+          <ScalarProperty Name="HSD" ColumnName="HSD" />
+          <ScalarProperty Name="Dvt" ColumnName="Dvt" />
+          <ScalarProperty Name="SoLuongTon" ColumnName="SoLuongTon" />
+          <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+          <ScalarProperty Name="MaNCC" ColumnName="MaNCC" />
+          <ScalarProperty Name="ID_NhaKho" ColumnName="ID_NhaKho" />
+          <ScalarProperty Name="ID_PhieuNhap" ColumnName="ID_PhieuNhap" />
+          <ScalarProperty Name="ID_Nhom" ColumnName="ID_Nhom" />
+          <ScalarProperty Name="Tang" ColumnName="Tang" />
+          <ScalarProperty Name="Hang" ColumnName="Hang" />
+          <ScalarProperty Name="Cot" ColumnName="Cot" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VaiTros">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.VaiTro">
+        <MappingFragment StoreEntitySet="VaiTros">
+          <ScalarProperty Name="mavaitro" ColumnName="mavaitro" />
+          <ScalarProperty Name="tenvaitro" ColumnName="tenvaitro" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VitriSuas">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.VitriSua">
+        <MappingFragment StoreEntitySet="VitriSuas">
+          <ScalarProperty Name="ID_ViTri" ColumnName="ID_ViTri" />
+          <ScalarProperty Name="ID_NhaKho" ColumnName="ID_NhaKho" />
+          <ScalarProperty Name="Tang" ColumnName="Tang" />
+          <ScalarProperty Name="Hang" ColumnName="Hang" />
+          <ScalarProperty Name="Cot" ColumnName="Cot" />
+          <ScalarProperty Name="Note" ColumnName="Note" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Developers">
+      <EntityTypeMapping TypeName="CSDLQLKhoGPVModel.Developer">
+        <MappingFragment StoreEntitySet="Developers">
+          <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

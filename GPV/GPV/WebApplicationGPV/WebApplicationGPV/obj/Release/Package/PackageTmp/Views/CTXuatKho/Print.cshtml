@@ -1,0 +1,111 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.CT_XuatKho>
+@{
+    Layout = null;
+    var phieuxuat = ViewBag.phieuxuat as WebApplicationGPV.Models.PhieuXuat;
+    List<WebApplicationGPV.Models.CT_XuatKho> ct = ViewBag.CTX;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CHI TIẾT PHIẾU XUẤT</title>
+    <link href="~/Content/site.css" rel="stylesheet" />
+    <style>
+        .center {
+            justify-content: center;
+        }
+
+        .text {
+            margin-left: 154px;
+        }
+    </style>
+</head>
+<body class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-3">
+                <h3>
+                    <img src="~/upload/logo.png" width="50" height="50" class="mb-2 mr-3" />
+                    <b>CÔNG TY CỔ PHẦN THƯƠNG MẠI QUỐC TẾ GIA PHÚC VINH</b>
+                </h3>
+                <h4><b>HÓA ĐƠN XUẤT KHO</b></h4>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-6">
+                <b>ĐỊA CHỈ:</b>&nbsp;340/20A Quang Trung, Phường 10, Quận Gò Vấp, TP Hồ Chí Minh<br>
+                <b>ĐIỆN THOẠI: </b>(028) 6257 1699<br>
+                <b>WEBSITE:</b> www.giavietpharma.vn
+            </div>
+            <div class="col-sm-6">
+                <b>MÃ SỐ PHIẾU:</b>&nbsp;@phieuxuat.ID_PhieuXuat</><br>
+                <b>THỜI GIAN:</b><i>&nbsp;@phieuxuat.ThoiGian.Value.ToString("dd/MM/yyyy")</i><br>
+                <b>NHÂN VIÊN:</b><i>&nbsp;@phieuxuat.NhanVien.TenNV</i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>SỐ SERIAL</th>
+                            <th>TÊN SẢN PHẨM</th>
+                            <th>ĐƠN GIÁ</th>
+                            <th>GHI CHÚ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.MaHH</td>
+                                <td>@item.SanPham.TenHH</td>
+                                <td>@string.Format("{0:0,0}", item.SanPham.DonGia) VNĐ</td>
+                                <td>@item.Note</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                    * Phiếu có giá trị, TGTGT trong thuê!
+                </p>
+            </div>
+                <div class="float-right">
+                        <table class="table">
+                            <tr>
+                                <th class="mr-5">THANH TOÁN</th>
+                                <td></td>
+                            </tr>
+                            @foreach (var items in Model)
+                            {
+                                <tr>
+                                    <th>@items.SanPham.TenHH</th>
+                                    <td>@string.Format("{0:0,0}", @items.SanPham.DonGia)&nbsp;X @items.SoLuong&nbsp;@items.SanPham.Dvt&nbsp; = &nbsp;@string.Format("{0:0,0}", @items.Tongcong) VNĐ</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th>TỔNG CỘNG:</th>
+                                <td><b class="text">@string.Format("{0:0,0}", ct.AsEnumerable().Where(x => x.ID_PhieuXuat == phieuxuat.ID_PhieuXuat).Sum(x => x.Tongcong)) VNĐ</b></td>
+                            </tr>
+                        </table>
+                </div>
+        </div>
+        <div class="row mt-4 text-center">
+            <h5 class="col-6">Người mua hàng</h5>
+            <h5 class="col-6">Người làm phiếu</h5>
+        </div>
+    </div>
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Scripts/Site.js"></script>
+    <script src="~/Scripts/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", window.print());
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿@model WebApplicationGPV.Models.NhomSanPham
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="textName"></h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    @Html.HiddenFor(model => model.ID_Nhom, new { id = "txtmanhom" })
+                    <div class="form-group col-sm-12">
+                        @Html.Label("TÊN NHÓM SẢN PHẨM", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.TenNhom, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtten" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success btn-sm" id="btnSaveNHH">Thêm</button>
+            &nbsp; <button type="button" data-dismiss="modal" class="btn btn-warning btn-sm">Hủy</button>
+        </div>
+    </div>
+</div>
+

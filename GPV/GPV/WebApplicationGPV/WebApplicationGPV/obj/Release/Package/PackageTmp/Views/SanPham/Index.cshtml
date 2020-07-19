@@ -1,0 +1,101 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.SanPham>
+@{
+    ViewBag.Title = "DANH SÁCH SẢN PHẨM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title" style="text-transform: uppercase;"><b>@ViewBag.Title</b></h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm float-right" style="width: 700px;">
+                            <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm...">
+                            <div class="input-group-append">
+                                <a href="/SanPham/Reports?type=word" class="btn btn-outline-danger btn-sm"><i class="far fa-file-excel"></i> excel (.csxl)</a>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-word"></i> word (.doc)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" style="margin-top: -16px;">
+                    <div class="container-fluid">
+                        @if (Model != null)
+                        {
+                            <table id="myTablephieuxuat" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>SỐ SERIAL</th>
+                                        <th>TÊN SẢN PHẨM</th>
+                                        <th>NHÀ CUNG CẤP</th>
+                                        <th>SỐ LƯỢNG TỒN</th>
+                                        <th>ACTIVE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myTables">
+                                    @foreach (var item in Model)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.MaHH</td>
+                                            <td>@item.TenHH</td>
+                                            <td>@item.NhaCungCap.TenNCC</td>
+                                            <td>@item.SoLuongTon</td>
+                                            <td>
+                                                <p class="btn btn-sm btn-success">@Html.Raw(item.Status ? "SP Tồn kho" : "SP Hết hàng")</p>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning">
+                                <strong>Warning!</strong> Không có dữ liệu.
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .center {
+            justify-content: center;
+        }
+    </style>
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTablephieuxuat').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "searching": false,
+                'language': {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+                }
+            });
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}
+

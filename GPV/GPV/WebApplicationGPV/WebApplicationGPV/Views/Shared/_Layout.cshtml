@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="icon" href="~/icon.ico" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="~/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    @RenderSection("css", false)
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        @Html.Partial("_Slidebar")
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <div>
+                    @Html.Partial("_Nav")
+                </div>
+                <div>
+                    @RenderBody()
+                </div>
+            </div>
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Khóa luận tốt nghiệp - minhandev 2020 - Version 1.0.0</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Bạn có muốn đăng xuất?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Hủy</button>
+                    <a class="btn btn-primary" href="@Url.Action("Logout", "Login")">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/vendor/jquery/jquery.js"></script>
+    <script src="~/Scripts/vendor/jquery-easing/jquery.easing.js"></script>
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Scripts/Site.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+    @RenderSection("js", false)
+    <script>
+        $(document).ready(function () {
+            $("#btnLogin").click(function () {
+                Login();
+            });
+        });
+
+        function Login() {
+            formData = new FormData();
+            formData.append("MatKhau", $("#txtmatkhau").val());
+            $.ajax({
+                url: '@Url.Action("Index", "Developer")',
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == true) {
+                        window.location.href = data.url;
+                    }
+                    else {
+                        toastr.error(data.message, { timeOut: 3000 });
+                    }
+                },
+            });
+        }
+    </script>
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+</body>
+</html>
+
+

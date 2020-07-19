@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "TRANG CHỦ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<WebApplicationGPV.Models.SanPham> sp = ViewBag.SP;
+    List<WebApplicationGPV.Models.CT_XuatKho> ct = ViewBag.XK;
+    List<WebApplicationGPV.Models.NhanVien> nv = ViewBag.NV;
+}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">SẢN PHẨM NHẬP</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Trong kho hiện có: <b class="badge badge-warning">@sp.Count()</b> sản phẩm</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-cart-plus fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("index", "Phieuxuat")" class="float-right">CHI TIẾT&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">SỐ LƯỢNG XUẤT BÁN</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Số lượng: <b class="badge badge-warning">@ct.AsEnumerable().Sum(x => x.SoLuong)</b> hộp</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-cart-arrow-down fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("index", "Phieuxuat")" class="float-right">CHI TIẾT&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">DOANH THU</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@string.Format("{0:0,0}", ct.AsEnumerable().Sum(x => x.Tongcong)) VNĐ</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("index", "Phieuxuat")" class="float-right">CHI TIẾT&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">NHÂN VIÊN</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Hệ thống có: <b class="badge badge-warning">@nv.Count()</b> nhân viên</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-cog fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("index", "Phieuxuat")" class="float-right">CHI TIẾT&nbsp;<i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">TỔNG SUẤT NHẬP</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-bar">
+                        <canvas id="myBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section js{
+    <script src="~/Scripts/Chart.js"></script>
+    <script src="~/Scripts/chart-bar-demo.js"></script>
+}

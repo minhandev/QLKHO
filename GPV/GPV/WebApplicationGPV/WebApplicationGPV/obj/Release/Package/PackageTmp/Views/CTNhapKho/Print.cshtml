@@ -1,0 +1,91 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.SanPham>
+@{
+    Layout = null;
+    var phieuNhap = ViewBag.phieuNhap as WebApplicationGPV.Models.PhieuNhap;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CHI TIẾT PHIẾU XUẤT</title>
+    <link href="~/Content/site.css" rel="stylesheet" />
+
+</head>
+<body class="mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-3">
+                <h3>
+                    <img src="~/upload/logo.png" width="50" height="50" class="mb-2 mr-3" />
+                    <b>CÔNG TY CỔ PHẦN THƯƠNG MẠI QUỐC TẾ GIA PHÚC VINH</b>
+                </h3>
+                <h4><b>HÓA ĐƠN NHẬP KHO</b></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <address>
+                    <b>ĐỊA CHỈ:</b>&nbsp;340/20A Quang Trung, Phường 10, Quận Gò Vấp, TP Hồ Chí Minh<br>
+                    <b>ĐIỆN THOẠI: </b>(028) 6257 1699<br>
+                    <b>WEBSITE:</b> www.giavietpharma.vn
+                </address>
+            </div>
+            <div class="col-sm-6">
+                <b>MÃ SỐ PHIẾU NHẬP KHO:</b>&nbsp;@phieuNhap.ID_PhieuNhap</><br>
+                <b>THỜI GIAN:</b><i>&nbsp;@phieuNhap.ThoiGian.Value.ToString("dd/MM/yyyy")</i><br>
+                <b>NHÂN VIÊN NHẬP KHO:</b><i>&nbsp; @phieuNhap.NhanVien.TenNV</i>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>MÃ SẢN PHẨM</th>
+                            <th>TÊN SẢN PHẨM</th>
+                            <th>NHÀ CUNG CẤP</th>
+                            <th>NSX - HSD</th>
+                            <th>SỐ LƯỢNG</th>
+                            <th>ĐƠN GIÁ</th>
+                            <th>TỔNG CỘNG</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var total = item.DonGia * item.SoLuongTon;
+                            <tr>
+                                <td>
+                                    @item.MaHH
+                                </td>
+                                <td>
+                                    @item.TenHH
+                                </td>
+                                <td>
+                                    @item.NhaCungCap.TenNCC
+                                </td>
+                                <td>
+                                    <span class="label label-default">@item.NSX.Value.ToString("dd/MM/yyyy")</span> : <span class="label label-default">@item.HSD.Value.ToString("dd/MM/yyyy")</span>
+                                </td>
+                                <td>
+                                    @item.SoLuongTon
+                                </td>
+                                <td>@string.Format("{0:0,0}", item.DonGia) VNĐ</td>
+                                <td>@string.Format("{0:0,0}", total) VNĐ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Scripts/Site.js"></script>
+    <script src="~/Scripts/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", window.print());
+    </script>
+</body>
+</html>

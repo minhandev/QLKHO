@@ -1,0 +1,264 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.HangHoa>
+@{
+    ViewBag.Title = "DANH SÁCH SẢN PHẨM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+                    <h3 class="card-title" style="text-transform: uppercase;"><b>@ViewBag.Title</b></h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm float-right" style="width: 700px;">
+                            <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm  ...">
+                            <div class="input-group-append">
+                                <button id="btnAdd" type="button" class="btn btn-outline-success btn-sm" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#Add"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-excel"></i> excel (.csxl)</a>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-word"></i> word (.doc)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model != null)
+                    {
+
+                        <table id="tableNhomhang" class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>MÃ HÀNG HÓA</th>
+                                    <th>TÊN</th>
+                                    <th>ĐƠN GIÁ</th>
+                                    <th>NHÓM SẢN PHẨM</th>
+                                    <th>SỐ LƯỢNG TỒN</th>
+                                    <th>MÔ TẢ</th>
+                                    <th>ACTIVE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="myTables">
+
+                                @foreach (var item in Model)
+                                {
+                                    i++;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.MaHH</td>
+                                        <td>@item.TenHH</td>
+                                        <td>@string.Format("{0:0,0}", item.DonGia) VNĐ</td>
+                                        <td>@item.NhomHangHoa.TenNHH</td>
+                                        <td>@item.SoLuongTon</td>
+                                        <td>@item.MoTa</td>
+                                        <td class="project-actions text-right">
+                                            <a href="" type="button" id="btntinhtrang" class="btn btn-outline-success btn-sm" title="Kích hoạt tài khoản" onclick="ActiveStatus('@item.MaHH')">@Html.Raw(item.Status ? "Ok" : "No")</a>
+                                            <button id="btnEdit" class="btn btn-warning btn-sm" onclick="Edit('@item.MaHH')" title="Cập nhật thông tin nhân viên"><i class="fas fa-edit"></i></button>
+                                            <button id="btnDelete" class="btn btn-danger btn-sm" onclick="Delete('@item.MaHH')" title="Xóa thông tin nhân viên"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Warning!</strong> Không có dữ liệu.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Add" class="modal fade" role="dialog">
+    @Html.Action("Add", "hanghoa")
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+
+        $('#tableNhomhang').DataTable({
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "searching": false,
+            'language': {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+            }
+        });
+
+        $(document).ready(function () {
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $("#btnSave").click(function () {
+                SaveData();
+            });
+
+            $("#btnAdd").click(function () {
+                $("#txtdongia").val('');
+                $("#txtnhh").val('');
+                $("#txthanghoa").val('');
+                $("#txtten").val('');
+                $("#txtmota").val('');
+                $("#txtsoluog").val('');
+                $('#btn-active').hide();
+                $('#btnSave').show();
+                $("#txthanghoa").attr("readonly", false);
+                $("#textName").text('THÊM SẢN PHẨM');
+            });
+
+            $("#btn-active").click(function () {
+                SaveDataEdit();
+            });
+        });
+        /* Cập nhật tình trạng nhân sự*/
+        function ActiveStatus(id) {
+            $.ajax({
+                url: '/hanghoa/ChangeStatusHH',
+                data: { "id": id },
+                dataType: "json",
+                type: "POST",
+                processData: true,
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == true) {
+                        location.reload();
+                    }
+                }
+            });
+        }
+
+        /*Thêm mới nhân sự*/
+        function SaveData() {
+            formData = new FormData();
+            formData.append("MaHH", $("#txthanghoa").val());
+            formData.append("ID_NHH", $("#txtnhh").val());
+            formData.append("TenHH", $("#txtten").val());
+            formData.append("MoTa", $("#txtmota").val());
+            formData.append("MoTa", $("#txtmota").val());
+            formData.append("DonGia", $("#txtdongia").val());
+            $.ajax({
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == true) {
+                        alert(data.message);
+                        location.reload();
+                        $("#Add").modal('hide');
+                    }
+                },
+                error: function () {
+                    toastr.error("Lỗi, vui lòng thử lại sau!", { timeOut: 3000 });
+                }
+            })
+        }
+
+        function SaveDataEdit() {
+            formData = new FormData();
+            formData.append("MaHH", $("#txthanghoa").val());
+            formData.append("ID_NHH", $("#txtnhh").val());
+            formData.append("TenHH", $("#txtten").val());
+            formData.append("MoTa", $("#txtmota").val());
+            formData.append("MoTa", $("#txtmota").val());
+            formData.append("DonGia", $("#txtdongia").val());
+            $.ajax({
+                url: '/hanghoa/Edit',
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == true) {
+                        alert(data.message);
+                        location.reload();
+
+                        $("#Add").modal('hide');
+                    }
+                },
+                error: function () {
+                    toastr.error("Lỗi, vui lòng thử lại sau!", { timeOut: 3000 });
+                }
+            })
+        }
+
+        function Edit(id) {
+            $.ajax({
+                url: '/hanghoa/Send',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    console.log("data success!");
+                    console.log(data);
+                    $("#txtnhh").val(data.ID_NHH);
+                    $("#txthanghoa").val(data.MaHH);
+                    $("#txtten").val(data.TenHH);
+                    $("#txtmota").val(data.MoTa);
+                    $("#txtdongia").val(data.DonGia);
+                    $('#btnSave').hide();
+                    $("#txthanghoa").attr("readonly", true);
+                    $("#Add").modal({ show: true });
+
+                    $("#textName").text('CẬP NHẬT SẢN PHẨM: ' + data.TenHH);
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                },
+            });
+        }
+
+        function Delete(id) {
+            console.log(id);
+            var result = confirm('Bạn có muốn xóa?');
+            if (result == false) {
+                return false;
+            }
+            $.ajax({
+                url: '/hanghoa/Delete',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log("data success!");
+                        toastr.success(data.message, "Error Alert", { timeOut: 3000 });
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                }
+            });
+        }
+    </script>
+}
+

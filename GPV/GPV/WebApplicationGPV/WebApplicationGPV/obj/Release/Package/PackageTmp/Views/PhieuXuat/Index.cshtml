@@ -1,0 +1,108 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.PhieuXuat>
+@{
+    ViewBag.Title = "DANH SÁCH PHIẾU XUẤT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title" style="text-transform: uppercase;"><b>@ViewBag.Title</b></h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm float-right" style="width: 700px;">
+                            <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm...">
+                            <div class="input-group-append">
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-excel"></i> excel (.csxl)</a>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-word"></i> word (.doc)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @using (Html.BeginForm("Index", "Phieuxuat", FormMethod.Post, new { @class = "form-inline mt-3 center" }))
+                {
+                    <div class="form-group mx-sm-2 mb-1">
+                        <label class="mr-2 inputsm input-group-addon"><i class="fa fa-calendar"></i>&nbsp; Từ ngày:</label>
+                        <input type="date" class="form-control input-sm" name="TimeStart">
+                    </div>
+                    <div class="form-group mx-sm-2 mb-1">
+                        <label class="mr-2 inputsm input-group-addon"><i class="fa fa-calendar"></i>&nbsp; Đến ngày:</label>
+                        <input type="date" class="form-control input-sm" name="TimeEnd">
+                    </div>
+                    <button type="submit" class="btn btn-success mb-1 btn-sm"><i class="fa fa-filter"></i> Tìm</button>
+                }
+                <div class="card-body" style="margin-top: -16px;">
+                    <div class="container-fluid">
+                        @if (Model != null)
+                        {
+                            <table id="myTablephieuxuat" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>MÃ PHIẾU XUẤT</th>
+                                        <th>THỜI GIAN</th>
+                                        <th>NHÂN VIÊN XUẤT</th>
+                                        <th>GHI CHÚ</th>
+                                        <th>ACTIVE</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="myTables">
+                                    @foreach (var item in Model)
+                                    {
+                                        i++;
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@item.ID_PhieuXuat</td>
+                                            <td>@item.ThoiGian</td>
+                                            <td>@item.NhanVien.TenNV</td>
+                                            <td>@item.Note</td>
+                                            <td class="project-actions text-right">
+                                                <a href="@Url.Action("Index", "CTXuatKho", new { ID_PhieuXuat = item.ID_PhieuXuat })" class="btn btn-sm btn-warning"> <i class="fa fa-edit"></i> Hóa đơn</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .center {
+            justify-content: center;
+        }
+    </style>
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTablephieuxuat').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "searching": false,
+                'language': {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+                }
+            });
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

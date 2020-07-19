@@ -1,0 +1,144 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.CT_XuatKho>
+@{
+    ViewBag.Title = "CHI TIẾT PHIẾU XUẤT";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var phieuxuat = ViewBag.phieuxuat as WebApplicationGPV.Models.PhieuXuat;
+    List<WebApplicationGPV.Models.CT_XuatKho> ct = ViewBag.CTX;
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5>HÓA ĐƠN XUẤT KHO</h5>
+            <div class="card-tools">
+                <div class="input-group input-group-sm float-right" style="width: 700px;">
+                    <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm...">
+                    <div class="input-group-append">
+                        @using (Html.BeginForm())
+                        {
+                            <button class="btn btn-outline-danger btn-sm float-right" name="export_excel" value="export_excel"><i class="far fa-file-excel"></i> excel (.csxl)</button>
+                        }
+                        <a href="@Url.Action("Print", "CTXuatKho", new { ID_PhieuXuat = phieuxuat.ID_PhieuXuat})" target="_blank" class="btn btn-outline-danger btn-sm float-right"><i class="fas fa-print"></i> Print</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 text-center mb-3">
+                    <h3>
+                        CÔNG TY CỔ PHẦN THƯƠNG MẠI QUỐC TẾ GIA PHÚC VINH
+                    </h3>
+                    <h4>HÓA ĐƠN XUẤT KHO</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <address>
+                        <b>ĐỊA CHỈ:</b>&nbsp;340/20A Quang Trung, Phường 10, Quận Gò Vấp, TP Hồ Chí Minh<br>
+                        <b>ĐIỆN THOẠI: </b>(028) 6257 1699<br>
+                        <b>WEBSITE:</b> www.giavietpharma.vn
+                    </address>
+                </div>
+                <div class="col-sm-6">
+                    <b>MÃ SỐ PHIẾU:</b>&nbsp;@phieuxuat.ID_PhieuXuat</><br>
+                    <b>THỜI GIAN:</b><i>&nbsp;@phieuxuat.ThoiGian.Value.ToString("dd/MM/yyyy")</i><br>
+                    <b>NHÂN VIÊN:</b><i>&nbsp;@phieuxuat.NhanVien.TenNV</i>
+                </div>
+
+            </div>
+            <p class="text-center">Ngày lập hóa đơn: &nbsp;@DateTime.Now.ToString("dd/MM/yyyy")</p>
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>SỐ SERIAL</th>
+                                <th>TÊN SẢN PHẨM</th>
+                                <th>SỐ LƯỢNG</th>
+                                <th>ĐƠN GIÁ</th>
+                                <th>GHI CHÚ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.MaHH</td>
+                                    <td>@item.SanPham.TenHH</td>
+                                    <td>@item.SoLuong/@item.SanPham.Dvt</td>
+                                    <td>@string.Format("{0:0,0}", item.SanPham.DonGia) VNĐ</td>
+                                    <td>@item.Note</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                        * Phiếu có giá trị, TGTGT trong thuê!
+                    </p>
+                </div>
+                <div class="col-6">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <th class="mr-5">THANH TOÁN</th>
+                            </tr>
+                            @foreach (var items in Model)
+                            {
+                                <tr>
+                                    <th>@items.SanPham.TenHH</th>
+                                    <td>@string.Format("{0:0,0}", @items.SanPham.DonGia)&nbsp;X @items.SoLuong&nbsp;@items.SanPham.Dvt&nbsp; = &nbsp;@string.Format("{0:0,0}", @items.Tongcong) VNĐ</td>
+                                </tr>
+                            }
+                            <tr>
+                                <th>TỔNG CỘNG:</th>
+                                <td><b class="text">@string.Format("{0:0,0}", ct.AsEnumerable().Where(x => x.ID_PhieuXuat == phieuxuat.ID_PhieuXuat).Sum(x => x.Tongcong)) VNĐ</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .center {
+            justify-content: center;
+        }
+
+        .text {
+            margin-left: 154px;
+        }
+    </style>
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "searching": false,
+                'language': {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+                }
+            });
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

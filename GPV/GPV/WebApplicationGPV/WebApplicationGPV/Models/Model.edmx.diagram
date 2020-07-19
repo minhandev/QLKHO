@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d9f45df01ed94c30b7f9fa180b471829" Name="Diagram1">
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.CapQuyen" Width="1.5" PointX="5.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.CT_XuatKho" Width="1.5" PointX="9" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.NhaCungCap" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.NhaKho" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.NhanVien" Width="1.5" PointX="1.5" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.NhomSanPham" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.PhieuNhap" Width="1.5" PointX="0.5" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.PhieuXuat" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.PhongBan" Width="1.5" PointX="1.5" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.SanPham" Width="1.5" PointX="3.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.VaiTro" Width="1.5" PointX="7.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.VitriSua" Width="1.5" PointX="8.125" PointY="11.125" IsExpanded="true" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_ctxuatkho_lohang" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_ctxuatkho_PhieuXuats" ManuallyRouted="true" >
+          <ConnectorPoint PointX="3.34375" PointY="2.922587890625" />
+          <ConnectorPoint PointX="3.34375" PointY="9.8568326822916656" />
+          <ConnectorPoint PointX="4.822916666666667" PointY="9.8568326822916656" />
+          <ConnectorPoint PointX="4.989583333333333" PointY="9.8568326822916656" />
+          <ConnectorPoint PointX="7.1334374999999994" PointY="9.8568326822916656" />
+          <ConnectorPoint PointX="7.1334374999999994" PointY="9.4297493489583317" />
+          <ConnectorPoint PointX="9" PointY="9.4297493489583317" />
+        </AssociationConnector>
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_SanPhams_NhaCungCaps" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_SanPhams_NhaKhoes" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_VitriSuas_nhakho" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_nhanvien_phieunhap" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_nhanvien_phongban" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_PhieuXuats_NhanViens" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_SanPhams_NNhomSanPhams" ManuallyRouted="false" />
+        <AssociationConnector Association="CSDLQLKhoGPVModel.fk_SanPhams_phieunhap" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CSDLQLKhoGPVModel.Developer" Width="1.5" PointX="7.375" PointY="4.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,425 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.SanPham>
+@{
+    Layout = null;
+    var lstNhaKho = ViewBag.lstNhaKho as IEnumerable<WebApplicationGPV.Models.NhaKho>;
+    var lstViTriSua = ViewBag.lstViTriSua as IEnumerable<WebApplicationGPV.Models.VitriSua>;
+    var color_suachua = "#fcfcbd";
+    var color_cohang = "#FAFAD2";
+    var color_trong = "#f2e8e8";
+    var color_colum = "#ebecef";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index1</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="~/Content/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <style>
+        #wrapper #content-wrapper {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        @using (Html.BeginForm("Index", "XKho", FormMethod.Post))
+        {
+            <div class="card card-default" id="xuatkho">
+                <div class="card-body">
+                    <div class="text-center mb-2"><b>DANH SÁCH XUẤT KHO</b></div>
+                    <table class="table" id="table-xuatkho">
+                        <thead>
+                            <tr>
+                                <td class="text-center"><b>SỐ SERIAL</b></td>
+                                <td class="text-center"><b>TÊN SẢN PHẨM</b></td>
+                                <td class="text-center"><b>SỐ LƯỢNG</b></td>
+                                <td class="text-center"><b>GHI CHÚ</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <button id="btnhuy" type="button" class="ml-2 btn btn-warning float-right">HỦY</button>
+                    <button id="btnXuatkho" type="submit" class="mb-3 btn btn-success float-right">HOÀN THÀNH</button>
+                </div>
+            </div>
+        }
+        @using (Html.BeginForm("NhapKho", "NhapKho", FormMethod.Post))
+        {
+            <div class="card" id="NhapKho">
+                <div class="card-body">
+                    <div class="text-center mb-2"><b>DANH SÁCH NHẬP KHO</b></div>
+                    <table class="table" id="table-nhapkho">
+                        <thead>
+                            <tr>
+                                <td>MÃ SẢN PHẨM</td>
+                                <td>TÊN SẢN PHẨM</td>
+                                <td>ĐƠN VỊ</td>
+                                <td>NHÀ CUNG CẤP</td>
+                                <td>NHÓM SẢN PHẨM</td>
+                                <td>NGÀY SẢN XUẤT</td>
+                                <td>HẠN SỬ DỤNG</td>
+                                <td>ĐƠN GIÁ</td>
+                                <td>SỐ LƯỢNG</td>
+                                <td>VỊ TRÍ</td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <button id="btnhuy2" type="button" class="ml-2 btn btn-warning float-right">HỦY</button>
+                    <button id="btnNhapkho" type="submit" class="mb-3 btn btn-success float-right">HOÀN THÀNH</button>
+                </div>
+            </div>
+        }
+
+        @foreach (var kho in lstNhaKho)
+        {
+            <div class="table-responsive">
+                <table class="table table-kho">
+                    <thead>
+                        <tr>
+                            <td style="background-color: #4e73df;"><b class="text-light">TẦNG</b></td>
+                            @for (int cot = 1; cot <= kho.SoCot; cot++)
+                            {
+                                <td class="text-center text-light" style="background-color: #4e73df;"><b>DÃY @cot</b></td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int tang = 1; tang <= kho.SoTang.Value; tang++)
+                        {
+                            for (int hang = 1; hang <= kho.SoHang.Value; hang++)
+                            {
+                                <tr>
+                                    @if (hang == 1)
+                                    {
+                                        <td class="text-center text-light" rowspan="@kho.SoHang.Value" style="background-color: #4e73df;"><b>TẦNG @tang</b></td>
+                                    }
+                                    @for (int cot = 1; cot <= kho.SoCot.Value; cot++)
+                                    {
+                                        var ob = Model.FirstOrDefault(q => q.Hang == hang && q.Cot == cot && q.Tang == tang && q.Status == true);
+                                        if (ob != null)
+                                        {
+                                            <td style="background: @color_colum">
+                                                <div class="badge badge-warning text-center"><b>TẦNG: @tang - HÀNG: @hang - CỘT: @cot </b></div>
+                                                <table style="background: @color_cohang">
+                                                    <tr><td>SỐ SERIAL:&nbsp;<b>@ob.MaHH</b>&nbsp;&nbsp;<b class="badge badge-dark text-center" onclick="Detail('@ob.MaHH')">CHI TIẾT</b></td></tr>
+                                                    <tr>
+                                                        <td>
+                                                            SẢN PHẨM: <b class="text-danger">@ob.TenHH</b>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td data-soluong="@ob.SoLuongTon">
+                                                            <b>SỐ LƯỢNG SẢN PHẨM: <span class="badge badge-danger">@ob.SoLuongTon</span></b>
+                                                            <div class="input-group">
+                                                                <input type="number" class="form-control input-soluong" placeholder="Số lượng xuất kho">
+                                                                <span onclick="xuatkho('@ob.MaHH','@ob.TenHH',this)" class="input-group-addon btn btn-outline-primary">
+                                                                    <b>XUẤT KHO</b>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            var vts = lstViTriSua.FirstOrDefault(q => q.Tang == tang && q.Hang == hang && q.Cot == cot);
+                                            if (vts != null)
+                                            {
+                                                <td style="background: @color_suachua; margin-top: 45%">
+                                                    <span class="badge badge-warning text-center"><b>TẦNG: @tang - HÀNG: @hang - CỘT: @cot </b></span>
+                                                    <p class="alert-secondary">THÔNG TIN: @vts.Note</p>
+                                                    <span class="badge badge-info" onclick="fixed('@vts.ID_ViTri')">SỬ DỤNG?</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td style="margin-top: 45%; background: @color_trong">
+                                                    <p><b class="badge badge-warning text-center">TẦNG: @tang - HÀNG: @hang - CỘT: @cot</b></p>
+                                                    <span title="Nhập sản phẩm vào kho" class="btn btn-primary" onclick="importing({Tang: @tang, Hang: @hang, Cot: @cot, ID_NhaKho : @kho.ID_NhaKho  },this)">NHẬP KHO</span>
+                                                    <span class="badge badge-info" onclick="confirm_fixing({Tang: @tang, Hang: @hang, Cot: @cot, ID_NhaKho : @kho.ID_NhaKho ,Note: ''})"><i class=" fa fa-wrench"></i></span>
+                                                </td>
+                                            }
+                                        }
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        }
+    </div>
+
+    <script src="~/Scripts/vendor/jquery/jquery.js"></script>
+    <script src="~/Scripts/vendor/jquery-easing/jquery.easing.js"></script>
+    <script src="~/Scripts/vendor/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Scripts/Site.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+    <!-- js sửa chữa -->
+    <script>
+
+        $(document).ready(function () {
+            $("#btnhuy").click(function () {
+                window.location.reload();
+            });
+            $("#btnhuy2").click(function () {
+                window.location.reload();
+            });
+        });
+
+        function fixed(id) {
+            if (confirm("Bạn có muốn sử dụng vị trí này?")) {
+                $.ajax({
+                    url: '@Url.Action("Fixed", "Mohinh")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (d) {
+                        if (d) {
+                            window.location.reload();
+                        } else {
+                            alert("Thay đổi thất bại");
+                        }
+                    },error: function(){
+                        alert("Đã có lỗi xảy ra");
+                    }
+                })
+            }
+        }
+
+        function confirm_fixing(vts) {
+            new_vts = vts;
+            $('#info_vitrisua').text(`Tầng ${vts.Tang} - Hàng ${vts.Hang} - Cột ${vts.Cot}`); //ES6
+        $("#myModal-fixing").modal("show");
+        }
+
+        var new_vts = undefined;
+        function fixing() {
+            new_vts.Note = $('#txtNote_ViTriSua').val();
+            $.ajax({
+                url: '@Url.Action("AddViTriSua", "Mohinh")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(new_vts),
+                success: function (d) {
+                    if (d) {
+                        window.location.reload();
+                    } else {
+                        alert("Thay đổi thất bại");
+                    }
+                },error: function(){
+                    alert("Đã có lỗi xảy ra");
+                }
+            })
+        }
+    </script>
+
+    <!-- js xuất kho -->
+    <script>
+        $('#btnXuatkho').hide();
+        $('#xuatkho').hide();
+        var index_xuatkho = 0;
+        function xuatkho(MaHH, TenHH, e) {
+            let soluong = $(e).closest('td').data('soluong');
+            var input = $(e).siblings('.input-soluong').val();
+            if (soluong > 0) {
+                if (input && 0 < Number(input) && Number(input) <= soluong) {
+
+                    $('#btnXuatkho').show();
+                    $('#xuatkho').show();
+                    $('#table-xuatkho tbody').append(`
+                                                                                                                                                            <tr>
+                                                                                                                                                                    <td><input type="text" readonly name="[${index_xuatkho}].MAHH" value="${MaHH}" class="form-control" placeholder="MÃ LÔ HÀNG" /></td>
+                                                                                                                                                                    <td><input type="text" readonly class="form-control" value="${TenHH}" /></td>
+                                                                                                                                                                    <td><input type="text" readonly name="[${index_xuatkho}].SoLuong" value="${input}" class="form-control" placeholder="SỐ LƯỢNG" /></td>
+                                                                                                                                                                    <td><input type="text" name="[${index_xuatkho++}].Note" class="form-control" placeholder="GHI CHÚ" /></td>
+                                                                                                                                                                </tr>
+                                                                                                                                                            `);
+                    $(e).closest('td').data('soluong', soluong - Number(input));
+                    $(e).html(` <b>/${soluong - Number(input)}</b>`);
+                } else {
+                    alert("Vui lòng nhập số lượng hợp lệ.");
+                }
+            } else {
+                alert("Số lượng hiện tại không đủ để xuất kho.");
+            }
+            debugger
+        }</script>
+
+    <!-- js nhập kho -->
+    <script>
+        $('#btnNhapkho').hide();
+        $('#NhapKho').hide();
+        function importing(thc, e) {
+            msanpham.sp.Tang = thc.Tang;
+            msanpham.sp.Hang = thc.Hang;
+            msanpham.sp.Cot = thc.Cot;
+            msanpham.sp.ID_NhaKho = thc.ID_NhaKho;
+            msanpham.e = e;
+            $('#nhapkho-vitri').text(`TẦNG ${msanpham.sp.Tang} - HÀNG ${msanpham.sp.Hang} - CỘT ${msanpham.sp.Cot}`);
+            $('#myModal-importing').modal("show");
+        }
+
+        var msanpham = {
+            e: 0,
+            sp: {
+                MaHH: 0,
+                TenHH: 0,
+                NSX: 0,
+                HSD: 0,
+                SoLuongTon: 0,
+                Dvt: 0,
+                DonGia: 0,
+                ID_NhaKho: 0,
+                ID_PhieuNhap: 0,
+                MaNCC: 0,
+                ID_Nhom: 0,
+                Tang: 0,
+                Hang: 0,
+                Cot: 0,
+                Status: 0,
+            }
+        };
+        var index_nhapkho = 0;
+        function nhapkho() {
+
+            msanpham.sp.MaHH = $('#txtmasp').val();
+            msanpham.sp.TenHH = $('#txttensp').val();
+            msanpham.sp.NSX = $('#txtnsx').val();
+            msanpham.sp.HSD = $('#txthsd').val();
+            msanpham.sp.Dvt = $('#txtdvt').val();
+            msanpham.sp.SoLuongTon = $('#txtsoluong').val();
+            msanpham.sp.DonGia = $('#txtdongia').val();
+            msanpham.sp.MaNCC = $('#txtmancc').val();
+            msanpham.sp.ID_Nhom = $('#ID_Nhom').val();
+            if (msanpham.sp.SoLuongTon <= 0 && msanpham.sp.DonGia <= 0) {
+                alert("Vui lòng kiểm tra lại số lượng hàng hóa.");
+                return false;
+            }
+            $('#NhapKho').show();
+            $('#btnNhapkho').show();
+            $(msanpham.e).hide();
+            $(msanpham.e).closest("td").addClass("importing");
+            $(msanpham.e).closest("td").text("ĐANG NHẬP KHO...")
+
+            var selectNCC = $('#selectNCC').clone();
+            selectNCC.children("select").attr("name", `[${index_nhapkho}].MaNCC`);
+            selectNCC.children("select").attr("id", `MaNCC${index_nhapkho}`);
+
+            var selectNSS = $('#selectNSS').clone();
+            selectNSS.children("select").attr("name", `[${index_nhapkho}].ID_Nhom`);
+            selectNSS.children("select").attr("id", `ID_Nhom${index_nhapkho}`);
+            $('#table-nhapkho tbody').append(`
+                                                                                                                                                <tr>
+                                                                                                                                                    <td><input type="text" name="[${index_nhapkho}].MaHH" value="${msanpham.sp.MaHH}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td><input type="text" name="[${index_nhapkho}].TenHH" value="${msanpham.sp.TenHH}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td><input type="text" name="[${index_nhapkho}].Dvt" value="${msanpham.sp.Dvt}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td>${$(selectNCC).html()}</td>
+                                                                                                                                                    <td>${$(selectNSS).html()}</td>
+                                                                                                                                                    <td><input type="text" readonly name="[${index_nhapkho}].NSX" value="${msanpham.sp.NSX}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td><input type="text" readonly name="[${index_nhapkho}].HSD" value="${msanpham.sp.HSD}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td><input type="number" name="[${index_nhapkho}].DonGia" value="${msanpham.sp.DonGia}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td><input type="number" name="[${index_nhapkho}].SoLuongTon" value="${msanpham.sp.SoLuongTon}" class="form-control" placeholder="Vui lòng nhập giá trị" /></td>
+                                                                                                                                                    <td>
+                                                                                                                                                        <input type="hidden" readonly name="[${index_nhapkho}].ID_NhaKho" value="${msanpham.sp.ID_NhaKho}" class="form-control" placeholder="Vui lòng nhập giá trị" />
+                                                                                                                                                        <input type="hidden" readonly name="[${index_nhapkho}].Tang" value="${msanpham.sp.Tang}" class="form-control" placeholder="Vui lòng nhập giá trị" />
+                                                                                                                                                        <input type="hidden" readonly name="[${index_nhapkho}].Hang" value="${msanpham.sp.Hang}" class="form-control" placeholder="Vui lòng nhập giá trị" />
+                                                                                                                                                        <input type="hidden" readonly name="[${index_nhapkho++}].Cot" value="${msanpham.sp.Cot}" class="form-control" placeholder="Vui lòng nhập giá trị" />
+                                                                                                                                                        Tầng ${msanpham.sp.Tang} - hàng ${msanpham.sp.Hang} - cột ${msanpham.sp.Cot}
+                                                                                                                                            </td>
+                                                                                                                                        </tr>
+                                                                                                                                                    `);
+            $(`#MaNCC${index_nhapkho - 1}`).val(msanpham.sp.MaNCC);
+            $('#myModal-importing').modal("hide");
+        }
+    </script>
+
+    <script>
+        function checkID(adress, sender) {
+            value = $(sender).siblings('input').val();
+            if (value) {
+                var cmb = $(adress);
+                var has = false;
+                cmb.children('option').each(function () {
+                    if ($(this).val() == value) {
+                        cmb.val(value);
+                        has = true;
+                    }
+                });
+                if (has == false) {
+                    alert("Không tồn tại giá trị này, vui lòng kiểm tra lại");
+                    return false;
+                }
+            } else {
+                alert("Vui lòng nhập giá trị");
+            }
+        }
+
+        function keyup_checkID(e, adress, sender) {
+            if (e.keyCode == 13) {
+                value = $(sender).val();
+                if (value) {
+                    var cmb = $(adress);
+                    var has = false;
+                    cmb.children('option').each(function () {
+                        if ($(this).val() == value) {
+                            cmb.val(value);
+                            has = true;
+                        }
+                    });
+                    if (has == false) {
+                        alert("Không tồn tại giá trị này, vui lòng kiểm tra lại");
+                        return false;
+                    }
+                } else {
+                    alert("Vui lòng nhập giá trị");
+                }
+            }
+        }
+
+        function fill(sender, adress) {
+            $(adress).val($(sender).val());
+        }</script>
+
+    <script>
+        function Detail(id) {
+            $.ajax({
+                url: '@Url.Action("Detail", "MoHinh")',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    console.log(data);
+                    $("#txtten").val(data.TenHH);
+                    $("#DetailModal").modal({ show: true });
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                },
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+﻿<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="http://giavietpharma.vn/">
+        <div class="sidebar-brand-icon">
+            <img src="~/upload/logo.png" width="35" height="35" class="mr-2" />
+        </div>
+        <div class="sidebar-brand-text">GIA PHÚC VINH</div>
+    </a>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "Home")">
+            <i class="fas fa-home"></i>
+            <span>TRANG CHỦ</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "MoHinh")">
+            <i class="fas fa-file-export"></i>
+            <span>NHẬP KHO - XUẤT KHO</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "SanPham")">
+            <i class="fab fa-product-hunt"></i>
+            <span>SẢN PHẨM</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "NhomSanPham")">
+            <i class="fab fa-product-hunt"></i>
+            <span>LOẠI SẢN PHẨM</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "nhacungcap")">
+            <i class="fab fa-buromobelexperte"></i>
+            <span>DS NHÀ CUNG CẤP</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "Phieunhap")">
+            <i class="fab fa-buromobelexperte"></i>
+            <span>DS PHIẾU NHẬP</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="@Url.Action("Index", "phieuxuat")">
+            <i class="fab fa-buromobelexperte"></i>
+            <span>DS PHIẾU XUẤT</span>
+        </a>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span><b>HỆ THỐNG</b></span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">CHỈ DÀNH CHO QUẢN LÝ</h6>
+                <a class="collapse-item" href="@Url.Action("index", "Nhanvien")">DS NHÂN VIÊN</a>
+                <a class="collapse-item" href="@Url.Action("index", "phongban")">DS CHỨC VỤ</a>
+                <a class="collapse-item" href="@Url.Action("index", "nhakho")">KHO</a>
+            </div>
+        </div>
+    </li>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fas fa-user-shield"></i>
+            <span><b>NHÀ PHÁT TRIỂN</b></span>
+        </a>
+    </li>
+    <hr class="sidebar-divider d-none d-md-block">
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+</ul>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">CHỈ DÀNH CHO NHÀ PHÁT TRIỂN</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Nhập mật khẩu nhà phát triển..." id="txtmatkhau">
+                        <div class="input-group-append">
+                            <button id="btnLogin" class="btn btn-outline-secondary" type="button">Đăng nhập</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

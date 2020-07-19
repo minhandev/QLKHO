@@ -1,0 +1,130 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.SanPham>
+@{
+    ViewBag.Title = "CHI TIẾT PHIẾU NHẬP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var phieuNhap = ViewBag.phieuNhap as WebApplicationGPV.Models.PhieuNhap;
+}
+@if (phieuNhap == null)
+{
+    <div class="alert alert-danger">
+        <strong>Xin lỗi!</strong> Không có phiếu này!
+    </div>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5>CHI TIẾT PHIẾU NHẬP</h5>
+            <div class="card-tools">
+                <div class="input-group input-group-sm float-right" style="width: 700px;">
+                    <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm...">
+                    <div class="input-group-append">
+                        @using (Html.BeginForm())
+                        {
+                            <button class="btn btn-outline-danger btn-sm float-right" name="export_excel" value="export_excel"><i class="far fa-file-excel"></i> excel (.csxl)</button>
+                        }
+                        <a href="@Url.Action("Print", "CTNhapKho", new { ID_PhieuNhap = phieuNhap.ID_PhieuNhap})" target="_blank" class="btn btn-outline-danger btn-sm float-right"><i class="fas fa-print"></i> Print</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 text-center mb-3">
+                    <h3>
+                        CÔNG TY CỔ PHẦN THƯƠNG MẠI QUỐC TẾ GIA PHÚC VINH
+                    </h3>
+                    <h4>HÓA ĐƠN NHẬP KHO</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <address>
+                        <b>ĐỊA CHỈ:</b>&nbsp;340/20A Quang Trung, Phường 10, Quận Gò Vấp, TP Hồ Chí Minh<br>
+                        <b>ĐIỆN THOẠI: </b>(028) 6257 1699<br>
+                        <b>WEBSITE:</b> www.giavietpharma.vn
+                    </address>
+                </div>
+                <div class="col-sm-6">
+                    <b>MÃ SỐ PHIẾU NHẬP KHO:</b>&nbsp;@phieuNhap.ID_PhieuNhap</><br>
+                    <b>THỜI GIAN:</b><i>&nbsp;@phieuNhap.ThoiGian.Value.ToString("dd/MM/yyyy")</i><br>
+                    <b>NHÂN VIÊN NHẬP KHO:</b><i>&nbsp; @phieuNhap.NhanVien.TenNV</i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>MÃ SẢN PHẨM</th>
+                                <th>TÊN SẢN PHẨM</th>
+                                <th>NHÀ CUNG CẤP</th>
+                                <th>NSX - HSD</th>
+                                <th>SỐ LƯỢNG</th>
+                                <th>ĐƠN GIÁ</th>
+                                <th>TỔNG CỘNG</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                var total = item.DonGia * item.SoLuongTon;
+                                <tr>
+                                    <td>
+                                        @item.MaHH
+                                    </td>
+                                    <td>
+                                        @item.TenHH
+                                    </td>
+                                    <td>
+                                        @item.NhaCungCap.TenNCC
+                                    </td>
+                                    <td>
+                                        <span class="label label-default">@item.NSX.Value.ToString("dd/MM/yyyy")</span> : <span class="label label-default">@item.HSD.Value.ToString("dd/MM/yyyy")</span>
+                                    </td>
+                                    <td>
+                                        @item.SoLuongTon
+                                    </td>
+                                    <td>@string.Format("{0:0,0}", item.DonGia) VNĐ</td>
+                                    <td>@string.Format("{0:0,0}", total) VNĐ</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .center {
+            justify-content: center;
+        }
+    </style>
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "searching": false,
+                'language': {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+                }
+            });
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

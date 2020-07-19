@@ -1,0 +1,198 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.NhaKho>
+@{
+    ViewBag.Title = "DANH SÁCH KHO HÀNG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title" style="text-transform: uppercase;"><b>@ViewBag.Title</b></h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm float-right" style="width: 700px;">
+                            <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm nhân viên...">
+                            <div class="input-group-append">
+                                <button id="btnAdd" type="button" class="btn btn-outline-success btn-sm" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#Add"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-excel"></i> excel (.csxl)</a>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-word"></i> word (.doc)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model != null)
+                    {
+                        <table id="tableKho" class="table">
+                            <thead>
+                                <tr>
+                                    <th>MÃ KHO</th>
+                                    <th>SỐ TẦNG</th>
+                                    <th>SỐ HÀNG</th>
+                                    <th>SỐ CỘT</th>
+                                    <th>TÌNH TRẠNG</th>
+                                    <th>ACTIVE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myTables">
+
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>@item.ID_NhaKho</td>
+                                    <td>@item.SoTang</td>
+                                    <td>@item.SoHang</td>
+                                    <td>@item.SoCot</td>
+                                    <td>@item.Status</td>
+                                    <td class="project-actions text-right">
+                                        <button id="btnEdit" class="btn btn-warning btn-sm" onclick="Edit(@item.ID_NhaKho)" title="Cập nhật thông tin nhân viên"><i class="fas fa-edit"></i></button>
+                                        <button id="btnDelete" class="btn btn-danger btn-sm" onclick="Delete(@item.ID_NhaKho)" title="Xóa thông tin nhân viên"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Warning!</strong> Không có dữ liệu.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Add" class="modal fade" role="dialog">
+    @Html.Action("Add", "nhakho")
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+
+        $('#tableKho').DataTable({
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "searching": false,
+            'language': {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+            }
+        });
+
+        $(document).ready(function () {
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $("#btnSave").click(function () {
+                SaveData();
+            });
+            $("#txtmanhakho").val("0");
+            $("#btnAdd").click(function () {
+                $("#txtmanhakho").val(0);
+                $("#txttang").val('');
+                $("#txthang").val('');
+                $("#txtcot").val('');
+                $("#txttt").hide();
+
+                $("#textName").text('THÊM THÔNG TIN KHO');
+            });
+        });
+
+        /*Thêm mới nhân sự*/
+        function SaveData() {
+            formData = new FormData();
+            formData.append("SoTang", $("#txttang").val());
+            formData.append("ID_NhaKho", $("#txtmanhakho").val());
+            formData.append("SoHang", $("#txthang").val());
+            formData.append("SoCot", $("#txtcot").val());
+            formData.append("Status", $("#txttt").val());
+            $.ajax({
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == true) {
+                        alert(data.message);
+                        location.reload();
+                        $("#Add").modal('hide');
+                    }
+                },
+                error: function () {
+                    toastr.error("Lỗi, vui lòng thử lại sau!", { timeOut: 3000 });
+                }
+            })
+        }
+
+        function Edit(id) {
+            $.ajax({
+                url: '/nhakho/Send',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    console.log("data success!");
+                    console.log(data);
+                    $("#txtmanhakho").val(data.ID_NhaKho);
+                    $("#txttang").val(data.SoTang);
+                    $("#txthang").val(data.SoHang);
+                    $("#txtcot").val(data.SoCot);
+                    $("#txttt").val(data.Status);
+                    $("#Add").modal({ show: true });
+                    $("#txttt").show();
+                    $("#textName").text('CẬP NHẬT NHÀ KHO:' + data.ID_NhaKho);
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                },
+            });
+        }
+
+        function Delete(id) {
+            console.log(id);
+            var result = confirm('Bạn có muốn xóa?');
+            if (result == false) {
+                return false;
+            }
+            $.ajax({
+                url: '/nhakho/Delete',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log("data success!");
+                        toastr.success(data.message, "Error Alert", { timeOut: 3000 });
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                }
+            });
+        }
+    </script>
+}
+

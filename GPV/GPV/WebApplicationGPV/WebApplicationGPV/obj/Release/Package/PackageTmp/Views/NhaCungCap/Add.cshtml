@@ -1,0 +1,45 @@
+﻿@model WebApplicationGPV.Models.NhaCungCap
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="textName">THÊM DANH SÁCH NHÂN VIÊN</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        @Html.Label("MÃ NCC", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.MaNCC, new { @class = "form-control", id = "txtmancc", required = "required", placeholder = "Nhập giá trị..." })
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.Label("TÊN", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.TenNCC, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtten" })
+                    </div>
+
+                    <div class="form-group col-sm-6">
+                        @Html.Label("ĐỊA CHỈ", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.DiaChi, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtdiachi" })
+                    </div>
+                    <div class="form-group col-sm-6">
+                        @Html.Label("SỐ ĐT", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.SDT, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtsdt" })
+                    </div>
+                    <div class="form-group col-sm-6">
+                        @Html.Label("EMAIL", new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Web, new { @class = "form-control", required = "required", placeholder = "Nhập giá trị...", id = "txtemail" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success btn-sm" id="btnSave">Thêm</button>
+            <button type="button" class="btn btn-success btn-sm" id="btn-active">Xác nhận</button>
+            &nbsp; <button type="button" data-dismiss="modal" class="btn btn-warning btn-sm">Hủy</button>
+        </div>
+    </div>
+</div>
+
+

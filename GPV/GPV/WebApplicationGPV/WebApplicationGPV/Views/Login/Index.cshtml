@@ -1,0 +1,62 @@
+﻿@model WebApplicationGPV.Models.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Đăng nhập | GPV</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="~/icon.ico" />
+    <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/animate/">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/login/css/main.css">
+</head>
+<body>
+    <div class="limiter">
+        <div class="container-login100 container">
+            <div class="wrap-login100">
+                <div class="login100-form-title" style="background-image: url('/Content/login/images/bg-01.jpg');">
+                    <div class="login100-form-title-1">
+                        <div class=""><img src="~/upload/logo.png" width="50" height="50" /><h2 class="text-light mt-3 mb-3"><b>CÔNG TY TMQT GIA PHÚC VINH</b></h2></div>
+                        <h4>GPV WAREHOUSE MANANGER</h4>
+                    </div>
+                </div>
+                @using (Html.BeginForm("Index", "login", FormMethod.Post, new { @class = "login100-form validate-form" }))
+                {
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger mb-3" });
+                    <div class="wrap-input100 validate-input m-b-26 form-group" data-validate="Vui lòng nhập tài khoản!">
+                        <span class="label-input100">Tài khoản :</span>
+                        @Html.TextBoxFor(model => model.taikhoan, new { @class = "form-control input100", placeholder = "Tên tài khoản", autofocus = "" })
+                    </div>
+
+                    <div class="wrap-input100 validate-input m-b-30 form-group" data-validate="Vui lòng nhập mật khẩu!">
+                        <span class="label-input100">Mật khẩu :</span>
+                        @Html.PasswordFor(model => model.MatKhau, new { @class = "form-control input100", placeholder = "Mật khẩu" })
+                        <span class="focus-input100"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success text-bold" style="margin-left: 95px;"> Đăng nhập</button>
+                }
+                @*<div class="text-center text-success"><h5 class="mb-3"><b>KHÓA LUẬN TỐT NGHIỆP - MINHANDEV</b></h5></div>*@
+            </div>
+        </div>
+    </div>
+    <script src="~/Content/login/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/Content/login/vendor/animsition/js/animsition.min.js"></script>
+    <script src="~/Content/login/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/Content/login/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/Content/login/vendor/select2/select2.min.js"></script>
+    <script src="~/Content/login/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/Content/login/vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="~/Content/login/vendor/countdowntime/countdowntime.js"></script>
+    <script src="~/Content/login/js/main.js"></script>
+</body>
+</html>

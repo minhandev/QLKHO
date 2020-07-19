@@ -1,0 +1,207 @@
+﻿@model IEnumerable<WebApplicationGPV.Models.NhomSanPham>
+@{
+    ViewBag.Title = "DANH SÁCH NHÓM SẢN PHẨM";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+
+                <div class="card-header">
+                    <h3 class="card-title" style="text-transform: uppercase;"><b>@ViewBag.Title</b></h3>
+                    <div class="card-tools">
+                        <div class="input-group input-group-sm float-right" style="width: 700px;">
+                            <input id="myInput" type="text" name="table_search" class="form-control float-right" placeholder="Tìm kiếm  ...">
+                            <div class="input-group-append">
+                                <button id="btnAdd" type="button" class="btn btn-outline-success btn-sm" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#Add"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-excel"></i> excel (.csxl)</a>
+                                <a href="" class="btn btn-outline-danger btn-sm"><i class="far fa-file-word"></i> word (.doc)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model != null)
+                    {
+                        
+                        <table id="tableNhomhang" class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>TÊN</th>
+                                    <th>ACTIVE</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="myTables">
+
+                                @foreach (var item in Model)
+                                {
+                                    i++;
+                                    <tr>
+                                        <td>@i</td>
+                                        <td>@item.TenNhom</td>
+                                        <td class="project-actions text-right">
+                                            <a href="" type="button" id="btntinhtrang" class="btn btn-outline-success btn-sm" title="Kích hoạt tài khoản" onclick="ActiveStatus('@item.ID_Nhom')">@Html.Raw(item.Status ? "Ok" : "No")</a>
+                                            <button id="btnEdit" class="btn btn-warning btn-sm" onclick="Edit(@item.ID_Nhom)" title="Cập nhật thông tin nhân viên"><i class="fas fa-edit"></i></button>
+                                            <button id="btnDelete" class="btn btn-danger btn-sm" onclick="Delete(@item.ID_Nhom)" title="Xóa thông tin nhân viên"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Warning!</strong> Không có dữ liệu.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Add" class="modal fade" role="dialog">
+    @Html.Action("Add", "NhomSanPham")
+</div>
+@section css{
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+@section js{
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+
+        $('#tableNhomhang').DataTable({
+            "bLengthChange": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bAutoWidth": false,
+            "searching": false,
+            'language': {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Vietnamese.json",
+            }
+        });
+
+        $(document).ready(function () {
+
+            $("#myInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#myTables tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            $("#btnSaveNHH").click(function () {
+                SaveData();
+            });
+            $("#txtmanhom").val("0");
+            $("#btnAdd").click(function () {
+                $("#txtmanhom").val(0);
+                $("#txtten").val('');
+                $("#textName").text('THÊM NHÓM HÀNG HÓA');
+            });
+
+            $("#btn-active").click(function () {
+                SaveDataEdit();
+            });
+        });
+
+        function ActiveStatus(id) {
+            $.ajax({
+                url: "/NhomSanPham/ChangeStatus",
+                data: { "id": id },
+                dataType: "json",
+                type: "POST",
+                processData: true,
+                success: function (data) {
+                    console.log(data);
+                    if (data.status == true) {
+                        location.reload();
+                    }
+                }
+            });
+        }
+
+        function SaveData() {
+            formData = new FormData();
+            formData.append("ID_Nhom", $("#txtmanhom").val());
+            formData.append("TenNhom", $("#txtten").val());
+            $.ajax({
+                async: true,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    console.log(data);
+                    if (data.success == true) {
+                        toastr.success(data.message, { timeOut: 3000 });
+                        location.reload();
+                        $("#Add").modal('hide');
+                    }
+                },
+                error: function () {
+                    toastr.error("Lỗi, vui lòng thử lại sau!", { timeOut: 3000 });
+                }
+            })
+        }
+
+        function Edit(id) {
+            $.ajax({
+                url: '/NhomSanPham/Send',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    console.log("data success!");
+                    console.log(data);
+                    $('#txtmanhom').val(data.ID_Nhom);
+                    $('#txtten').val(data.TenNhom);
+                    $('#btnSave').hide();
+                    $("#Add").modal({ show: true });
+                    $("#textName").text('CẬP NHẬT NHÓM SẢN PHẨM:' + data.TenNhom);
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                },
+            });
+        }
+
+        function Delete(id) {
+            console.log(id);
+            var result = confirm('Bạn có muốn xóa?');
+            if (result == false) {
+                return false;
+            }
+            $.ajax({
+                url: '/NhomSanPham/Delete',
+                dataType: "json",
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                data: { "id": id },
+                async: true,
+                processData: true,
+                success: function (data) {
+                    if (data.success == true) {
+                        console.log("data success!");
+                        toastr.success(data.message, "Error Alert", { timeOut: 3000 });
+                        location.reload();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("data error!");
+                    alert("Error!");
+                }
+            });
+        }
+    </script>
+}
+
